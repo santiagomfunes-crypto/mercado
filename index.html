@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mercado Inmobiliario — Tandil</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#f5f6fa;color:#1a1a2e;min-height:100vh}
+
+/* NAV */
+nav{background:#0b1437;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{color:#fff;font-size:18px;font-weight:800;letter-spacing:-.5px;text-decoration:none}
+.nav-logo span{color:#3b82f6}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{color:#cbd5e1;font-size:13px;font-weight:500;text-decoration:none}
+.nav-links a:hover{color:#fff}
+.nav-links a.active{color:#fff}
+.nav-btn{background:#3b82f6;color:#fff;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none}
+.nav-btn:hover{background:#2563eb;color:#fff}
+
+/* FILTROS */
+.filters-wrap{background:#fff;border-bottom:1px solid #e5e7eb;padding:12px 32px;position:sticky;top:60px;z-index:99}
+.filters-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:1200px;margin:0 auto}
+.f-select{padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;font-family:inherit;background:#fff;color:#1a1a2e;cursor:pointer;outline:none;font-weight:500}
+.f-select:focus{border-color:#3b82f6}
+.f-input{padding:8px 14px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;font-family:inherit;outline:none;min-width:220px;color:#1a1a2e}
+.f-input:focus{border-color:#3b82f6}
+.f-input::placeholder{color:#9ca3af}
+.f-check-wrap{display:flex;align-items:center;gap:6px;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;cursor:pointer;background:#fff;font-size:13px;font-weight:500;white-space:nowrap}
+.f-check-wrap:has(input:checked){border-color:#3b82f6;background:#eff6ff;color:#2563eb}
+.f-check-wrap input{cursor:pointer;accent-color:#3b82f6}
+.btn-clear{padding:8px 14px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;font-family:inherit;background:#fff;color:#6b7280;cursor:pointer;font-weight:500}
+.btn-clear:hover{border-color:#9ca3af;color:#374151}
+.filters-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.total-badge{font-size:13px;color:#6b7280;white-space:nowrap}
+.total-badge strong{color:#0b1437;font-weight:700}
+
+/* CONTENT */
+.content{max-width:1200px;margin:0 auto;padding:24px 32px}
+.section-title{font-size:20px;font-weight:800;color:#0b1437;margin-bottom:20px}
+
+/* GRID */
+.prop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:1100px){.prop-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:750px){.prop-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.prop-grid{grid-template-columns:1fr}}
+
+/* CARD */
+.prop-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);transition:box-shadow .2s,transform .2s;cursor:pointer;text-decoration:none;display:block;color:inherit}
+.prop-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.12);transform:translateY(-2px)}
+.card-img{height:160px;background:#e8edf5;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.card-img-icon{font-size:40px;opacity:.25}
+.card-img-bg{position:absolute;inset:0;background:linear-gradient(135deg,#dde3f0 0%,#c8d1e8 100%)}
+.card-img-pattern{position:absolute;inset:0;opacity:.05;background-image:repeating-linear-gradient(45deg,#0b1437 0,#0b1437 1px,transparent 0,transparent 50%);background-size:8px 8px}
+.badge-op{position:absolute;top:10px;left:10px;padding:3px 9px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.badge-venta{background:#0b1437;color:#fff}
+.badge-alquiler{background:#059669;color:#fff}
+.badge-fuente{position:absolute;top:10px;right:10px;padding:3px 8px;border-radius:6px;font-size:9px;font-weight:700}
+.badge-cdh{background:#dbeafe;color:#1d4ed8}
+.badge-ml{background:#fef3c7;color:#b45309}
+.card-price-overlay{position:absolute;bottom:0;left:0;right:0;padding:8px 12px;background:linear-gradient(transparent,rgba(11,20,55,.8));color:#fff;font-size:15px;font-weight:800}
+.card-price-overlay .pm2{font-size:10px;font-weight:400;opacity:.8;margin-left:4px}
+.card-body{padding:12px}
+.card-title{font-size:13px;font-weight:600;color:#1a1a2e;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-meta{display:flex;gap:10px;flex-wrap:wrap}
+.card-tag{font-size:11px;color:#6b7280;display:flex;align-items:center;gap:3px}
+.card-tag svg{width:11px;height:11px;opacity:.6}
+.card-zona{font-size:11px;color:#9ca3af;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* EMPTY / LOADING */
+.state-msg{text-align:center;padding:60px 20px;color:#9ca3af;font-size:14px;grid-column:1/-1}
+.state-msg strong{display:block;font-size:18px;color:#6b7280;margin-bottom:6px}
+
+/* LOAD MORE */
+.load-more-wrap{text-align:center;margin-top:32px}
+.btn-load-more{padding:12px 32px;background:#fff;border:1.5px solid #0b1437;border-radius:8px;font-size:14px;font-weight:600;color:#0b1437;cursor:pointer;font-family:inherit}
+.btn-load-more:hover{background:#0b1437;color:#fff}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:#1e293b;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9999}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<!-- APP -->
+<div id="app" style="display:block">
+  <nav>
+    <a href="#" class="nav-logo">SFRE <span>Mercado</span></a>
+    <div class="nav-links">
+      <a href="index.html">Guiones</a>
+      <a href="mercado.html" class="active">Mercado</a>
+    </div>
+    <a href="index.html" class="nav-btn">Guiones ↗</a>
+  </nav>
+
+  <!-- FILTROS -->
+  <div class="filters-wrap">
+    <div class="filters-row">
+      <select id="f-op" class="f-select" onchange="buscar()">
+        <option value="">Operación</option>
+        <option value="venta">Venta</option>
+        <option value="alquiler">Alquiler</option>
+      </select>
+      <select id="f-tipo" class="f-select" onchange="buscar()">
+        <option value="">Tipo</option>
+        <option value="departamento">Departamento</option>
+        <option value="casa">Casa</option>
+        <option value="lote">Lote</option>
+        <option value="local">Local</option>
+        <option value="oficina">Oficina</option>
+      </select>
+      <input id="f-q" class="f-input" type="text" placeholder="Buscar por barrio, calle, zona..." oninput="debounce()">
+      <select id="f-dorm" class="f-select" onchange="buscar()">
+        <option value="">Dormitorios</option>
+        <option value="1">1 dorm.</option>
+        <option value="2">2 dorm.</option>
+        <option value="3">3 dorm.</option>
+        <option value="4">4+ dorm.</option>
+      </select>
+      <select id="f-precio" class="f-select" onchange="buscar()">
+        <option value="">Precio</option>
+        <option value="0-50000">Hasta USD 50.000</option>
+        <option value="50000-100000">USD 50k – 100k</option>
+        <option value="100000-200000">USD 100k – 200k</option>
+        <option value="200000-999999999">Más de USD 200k</option>
+      </select>
+      <label class="f-check-wrap">
+        <input type="checkbox" id="f-pozo" onchange="buscar()"> En pozo
+      </label>
+      <button class="btn-clear" onclick="limpiar()">Limpiar</button>
+      <div class="filters-right">
+        <div class="total-badge" id="total-badge"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="section-title" id="section-title">Todas las propiedades</div>
+    <div class="prop-grid" id="grid"></div>
+    <div class="load-more-wrap">
+      <button class="btn-load-more" id="btn-mas" style="display:none" onclick="cargarMas()">Cargar más propiedades</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://pgnmpxqljxrpnvexcygh.supabase.co';
+var SB_KEY='sb_publishable_HmiBL9VpEhaYyPqjA1v67w_F38x48El';
+var SB_HEADERS={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
+
+var PAGE=40,offset=0,total=0,loaded=false;
+var debTO;function debounce(){clearTimeout(debTO);debTO=setTimeout(buscar,280);}
+
+function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+function fmt(n){return n?'USD '+Number(n).toLocaleString('es-AR'):'Consultar';}
+function pm2(p,m){return(p&&m)?'<span class="pm2">'+Math.round(p/m).toLocaleString('es-AR')+'/m²</span>':'';}
+
+function limpiar(){
+  ['f-op','f-tipo','f-dorm','f-precio'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('f-q').value='';
+  document.getElementById('f-pozo').checked=false;
+  buscar();
+}
+
+function getFilters(){
+  var precio=document.getElementById('f-precio').value.split('-');
+  return{
+    op:document.getElementById('f-op').value,
+    tipo:document.getElementById('f-tipo').value,
+    q:document.getElementById('f-q').value.trim(),
+    dorm:document.getElementById('f-dorm').value,
+    minP:precio[0]||'',
+    maxP:precio[1]||'',
+    pozo:document.getElementById('f-pozo').checked
+  };
+}
+
+function buscar(){
+  offset=0;loaded=false;
+  document.getElementById('grid').innerHTML='<div class="state-msg"><strong>Cargando...</strong></div>';
+  document.getElementById('btn-mas').style.display='none';
+  cargar(true);
+}
+
+function cargarMas(){offset+=PAGE;cargar(false);}
+
+function buildUrl(){
+  var f=getFilters();
+  var filters=[];
+  var select='id,titulo,tipologia,operacion,precio_usd,metros_totales,dormitorios,zona,url,fuente';
+  var base=SB_URL+'/rest/v1/propiedades_mercado?select='+select+'&order=precio_usd.asc.nullslast';
+  base+='&offset='+offset+'&limit='+PAGE;
+
+  if(f.op)filters.push('operacion=eq.'+f.op);
+  if(f.tipo)filters.push('tipologia=eq.'+f.tipo);
+  if(f.q){var qq=encodeURIComponent(f.q);filters.push('or=(titulo.ilike.*'+qq+'*,zona.ilike.*'+qq+'*)');}
+  if(f.dorm){if(f.dorm==='4')filters.push('dormitorios=gte.4');else filters.push('dormitorios=eq.'+f.dorm);}
+  if(f.minP)filters.push('precio_usd=gte.'+f.minP);
+  if(f.maxP)filters.push('precio_usd=lte.'+f.maxP);
+  if(f.pozo)filters.push('or=(titulo.ilike.*pozo*,titulo.ilike.*construccion*,titulo.ilike.*emprendimiento*,titulo.ilike.*obra*)');
+
+  return base+(filters.length?'&'+filters.join('&'):'');
+}
+
+function cargar(reset){
+  var url=buildUrl();
+  var hdrs=Object.assign({'Prefer':'count=exact','Range':offset+'-'+(offset+PAGE-1),'Range-Unit':'items'},SB_HEADERS);
+  window.fetch(url,{headers:hdrs}).then(function(r){
+    var cr=r.headers.get('Content-Range');
+    if(cr&&cr.indexOf('/')>-1)total=parseInt(cr.split('/')[1])||0;
+    return r.json();
+  }).then(function(items){
+    items=items||[];
+    var grid=document.getElementById('grid');
+    var badge=document.getElementById('total-badge');
+    var title=document.getElementById('section-title');
+
+    badge.innerHTML='<strong>'+total.toLocaleString('es-AR')+'</strong> propiedades';
+
+    var activeFilters=Object.values(getFilters()).some(function(v){return v&&v!==false;});
+    title.textContent=activeFilters?'Propiedades filtradas':'Todas las propiedades';
+
+    if(reset)grid.innerHTML='';
+    if(!items.length&&reset){
+      grid.innerHTML='<div class="state-msg"><strong>Sin resultados</strong>Probá con otros filtros</div>';
+      return;
+    }
+
+    var frag=document.createDocumentFragment();
+    items.forEach(function(p){
+      var a=document.createElement('a');
+      a.className='prop-card';
+      a.href=p.url||'#';
+      if(p.url)a.target='_blank';
+      var badgeOp=p.operacion==='alquiler'
+        ?'<span class="badge-op badge-alquiler">Alquiler</span>'
+        :'<span class="badge-op badge-venta">Venta</span>';
+      var badgeFuente=p.fuente==='casasdehoy'
+        ?'<span class="badge-fuente badge-cdh">CDH</span>'
+        :'<span class="badge-fuente badge-ml">ML</span>';
+      var precio=fmt(p.precio_usd);
+      var m2txt=p.metros_totales?Math.round(p.metros_totales)+'m²':null;
+      var dormtxt=p.dormitorios?p.dormitorios+(p.dormitorios===1?' dorm':' dorm'):null;
+      var tags=[p.tipologia,m2txt,dormtxt].filter(Boolean);
+      var zona=p.zona?(p.zona.length>35?p.zona.substring(0,35)+'...':p.zona):'';
+
+      a.innerHTML=
+        '<div class="card-img">'+
+          '<div class="card-img-bg"></div>'+
+          '<div class="card-img-pattern"></div>'+
+          '<svg class="card-img-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>'+
+          badgeOp+badgeFuente+
+          '<div class="card-price-overlay">'+precio+pm2(p.precio_usd,p.metros_totales)+'</div>'+
+        '</div>'+
+        '<div class="card-body">'+
+          '<div class="card-title">'+esc(p.titulo||tags.join(' · '))+'</div>'+
+          '<div class="card-meta">'+
+            tags.map(function(t){return '<span class="card-tag">'+esc(t)+'</span>';}).join('')+
+          '</div>'+
+          (zona?'<div class="card-zona">'+esc(zona)+'</div>':'')+
+        '</div>';
+      frag.appendChild(a);
+    });
+    grid.appendChild(frag);
+
+    loaded=true;
+    document.getElementById('btn-mas').style.display=(offset+PAGE<total)?'block':'none';
+  }).catch(function(e){
+    document.getElementById('grid').innerHTML='<div class="state-msg"><strong>Error</strong>'+esc(String(e))+'</div>';
+  });
+}
+
+var toastTO;
+function toast(msg,err){var el=document.getElementById('toast');el.textContent=msg;el.className='toast show'+(err?' err':'');clearTimeout(toastTO);toastTO=setTimeout(function(){el.className='toast';},2500);}
+
+buscar();
+</script>
+</body>
+</html>
